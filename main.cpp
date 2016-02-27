@@ -40,7 +40,7 @@ int main() {
         cout << "What are the fighting creatures in " << curTeam->getTeamName() << "?" << endl;
         for (int j = 0; j < numFighters; j++) {
             cout << "Please select type for " << curTeam->getTeamName();
-            cout << " fighter " << j << ":" << endl;
+            cout << " fighter " << (j + 1) << ":" << endl;
             cout << "[0] Barbarian, [1] Blue Men, [2] Harry Potter,";
             cout << " [3] Medusa, [4] Vampire" << endl;
             cin >> selection;
@@ -52,18 +52,6 @@ int main() {
             curTeam->add(creature);
         }
     }
-    // cout << "What are the fighting creatures in " << team2Name << "?" << endl;
-    // for (int i = 0; i < numFighters; i++) {
-    //     cout << "Please select type for creature " << i << ":" << endl;
-    //     cout << "[0] Barbarian, [1] Blue Men, [2] Harry Potter, [3] Medusa, [4] Vampire" << endl;
-    //     cin >> selection;
-    //     creatureType = static_cast<CREATURES>(selection);
-    //     creatureName = getCreatureString(creatureType);
-    //     cout << "Please enter the " << creatureName << "'s first name: ";
-    //     cin >> charaName;
-    //     creature = initializeCreature(creatureType, creatureName, charaName);
-    //     team2->add(creature);
-    // }
 
     Fighter *fighterRef = team1->getCurrentFighter();
     Creature *crRef;
