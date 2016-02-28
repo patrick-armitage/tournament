@@ -1,11 +1,11 @@
-/*******************************************************************************
+/**********************************************************************************
 ** Author: Patrick Armitage
 ** Date: 02/22/2016
-** Description: Loserpile class prototype which defines the basic functionality for
-** a stack, including the Loser  struct, the current stack loser data member
+** Description: Loserpile class prototype which defines the basic functionality
+** for a pile, including the Loser struct, the current pile loser Creature pointer
 ** and its getter and setter, the constructor, and the add and remove loser
-** stack methods
-*******************************************************************************/
+** pile methods
+**********************************************************************************/
 
 #include "Creature.hpp"
 

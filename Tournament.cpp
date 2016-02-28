@@ -1,8 +1,8 @@
 /*******************************************************************************
 ** Author: Patrick Armitage
-** Date: 02/10/2016
-** Description: Display fucntions file which defines the functions that were
-** prototyped within the Display header file
+** Date: 02/22/2016
+** Description: Tournament functions file which defines the functions that were
+** prototyped within the Tournament header file
 *******************************************************************************/
 
 #include <iostream>
@@ -79,14 +79,14 @@ Creature *initializeCreature(CREATURES creatureType, string creatureName, string
 /*----------------------------------------------------------------------------*/
 /*
     Function Name: playRound
-    Function Parameters: two Creature subclasses who will fight each other
-    What the function does: alternately has the two creatures attack and defend
-                            from one another, decrementing their strength pts
-                            based on damage done, and handling special cases
-                            where attack may be 0 (when Vampire charms opponent)
-                            or where it may be 99 (when Medusa glares), then
-                            finally sets the stillAlive creature bool if either
-                            creatures dies in combat
+    Function Parameters: the two teams' Fighterlineups and the losers pile
+    What the function does: Calls attackAndDefend for each creature to
+                            alernately attack each other, then calls
+                            checkWinnerAndLoser to determine the state of them
+                            if a creature does die, to add the creatures to
+                            respective fighterlineups or loserpile, and if it
+                            returns false, one team has lost all its players,
+                            and the game is over.
 */
 void playRound(Fighterlineup *team1, Fighterlineup *team2, Loserpile *losers) {
     Creature *player1 = team1->getCurrentFighter()->fighter;
@@ -123,6 +123,19 @@ void playRound(Fighterlineup *team1, Fighterlineup *team2, Loserpile *losers) {
     healPlayers(team1, team2);
 }
 
+/*----------------------------------------------------------------------------*/
+/*
+    Function Name: attackAndDefend
+    Function Parameters: the attacking and defending Creature object pointers
+    What the function does: has attacking creature attack defending creature,
+                            and defender defending, decrementing their strength pts
+                            based on damage done, and handling special cases
+                            where attack may be 0 (when Vampire charms opponent)
+                            or where it may be 99 (when Medusa glares), then
+                            sets the stillAlive creature bool if the defender
+                            dies in combat.  Returns false if the defender has
+                            died
+*/
 bool attackAndDefend(Creature *attacker, Creature *defender) {
     int attack, defense, defenderPoints;
     string attackerName = attacker->getCharaName();
@@ -161,6 +174,18 @@ bool attackAndDefend(Creature *attacker, Creature *defender) {
     return true;
 }
 
+/*----------------------------------------------------------------------------*/
+/*
+    Function Name: checkWinnerAndLoser
+    Function Parameters: the two teams' Fighterlineups and the losers pile
+    What the function does: checks to see if both current fighters are still
+                            alive.  If one is dead, removes that fighter from
+                            the team and adds to the loser pile.  If the
+                            opponent fighter's team has more lined up,
+                            removes that fighter from the front of the
+                            Fighterlineup and adds back in to the back of the
+                            lineup
+*/
 bool checkWinnerAndLoser(Fighterlineup *team1, Fighterlineup *team2, Loserpile *losers) {
     Fighter *team1CurFtr = team1->getCurrentFighter();
     Fighter *team2CurFtr = team2->getCurrentFighter();
@@ -201,6 +226,16 @@ bool checkWinnerAndLoser(Fighterlineup *team1, Fighterlineup *team2, Loserpile *
     }
 }
 
+/*----------------------------------------------------------------------------*/
+/*
+    Function Name: healPlayers
+    Function Parameters: the two teams' Fighterlineups
+    What the function does: Iterates over the fighters in each team.  If any
+                            fighter (not the current fighter doing the combat)
+                            has > 0 wins, that fighter will be healed 2 strength
+                            pts per round, if their current strength is under
+                            20 pts
+*/
 void healPlayers(Fighterlineup *team1, Fighterlineup *team2) {
     Fighterlineup *teams[2] = { team1, team2 };
     Fighterlineup *curTeam;
@@ -209,7 +244,7 @@ void healPlayers(Fighterlineup *team1, Fighterlineup *team2) {
 
     for (int i = 0; i < 2; i++) {
         curTeam = teams[i];
-        curPlayer = curTeam->getCurrentFighter()->nextFighter;
+        curPlayer = curTeam->getCurrentFighter()->nextFighter;  // we don't heal the current fighter
         while (curPlayer != NULL) {
             if (curPlayer->fighter->getNumWins() > 0) {
                 curStrength = curPlayer->fighter->getStrengthPts();
@@ -249,7 +284,18 @@ void printTitle(string name1, string name2) {
     cout << endl;
 }
 
+/*----------------------------------------------------------------------------*/
+/*
+    Function Name: showWinners
+    Function Parameters: two team's Fighterlineups
+    What the function does: finds the winning team, then gets the top 3 players
+                            from the winning team (if alive).  In the next
+                            section, sorts the 3 players according to who got
+                            the most wins.  Finally, prints the 3 fighters in
+                            order of 1st, 2nd and 3rd place
+*/
 void showWinners(Fighterlineup *team1, Fighterlineup *team2) {
+    /* Get top 3 fighters from winning team */
     Fighter *winner;
     Fighterlineup *winningTeam;
 
@@ -278,6 +324,7 @@ void showWinners(Fighterlineup *team1, Fighterlineup *team2) {
         numWinners++;
     }
 
+    /* Compare each fighter's wincount, ordering them 1st, 2nd and 3rd place */
     if (nextFtr != NULL) {
         if (winnerWins >= nextFtrWins) {
             if (nextNextFtr != NULL) {
@@ -322,6 +369,7 @@ void showWinners(Fighterlineup *team1, Fighterlineup *team2) {
         orderedFighters[0] = winner;
     }
 
+    /* Print winning fighters in order */
     cout << winningTeam->getTeamName() << " wins the tournament!!!!" << endl << endl;
     cin.ignore();
     cout << "The champions of the tournament are:" << endl;
@@ -343,6 +391,14 @@ void showWinners(Fighterlineup *team1, Fighterlineup *team2) {
     }
 }
 
+/*----------------------------------------------------------------------------*/
+/*
+    Function Name: showLosers
+    Function Parameters: Loserpile
+    What the function does: prints the name of each loser on top of the loser
+                            pile, then removes that loser, until there are no
+                            more losers in the loserpile
+*/
 void showLosers(Loserpile *losers) {
     cout << endl << "The losers who got beat to a pulp are:" << endl;
     while (losers->getCurrentLoser() != NULL) {

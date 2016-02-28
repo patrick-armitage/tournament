@@ -1,7 +1,7 @@
 /*******************************************************************************
 ** Author: Patrick Armitage
-** Date: 02/10/2016
-** Description: Game function prototypes, used as utility methods and called
+** Date: 02/22/2016
+** Description: Tournament function prototypes, used as utility methods and called
 ** directly within main.cpp, they include getCreatureString and
 ** initializeCreature for deciding which subclass to use, and printTitle,
 ** playRound and closeGame to control the flow of the game

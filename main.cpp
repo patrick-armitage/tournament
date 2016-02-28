@@ -12,6 +12,7 @@ using std::endl;
 using std::string;
 
 int main() {
+    /* Get team names and number of fighters */
     int numFighters;
     string team1Name, team2Name;
     cout << "Welcome to the Ultimate Creature Combat Tournament!!!" << endl;
@@ -25,6 +26,7 @@ int main() {
     cout << "How many fighters would you like each team to have? ";
     cin >> numFighters;
 
+    /* Initialize teams, loserpile */
     Fighterlineup *team1 = new Fighterlineup(team1Name);
     Fighterlineup *team2 = new Fighterlineup(team2Name);
     Fighterlineup *teams[2] = { team1, team2 };
@@ -35,6 +37,7 @@ int main() {
     string creatureName, charaName;
     Creature *creature;
 
+    /* Get fighter types and names for each team */
     for (int i = 0; i < 2; i++) {
         curTeam = teams[i];
         cout << "What are the fighting creatures in " << curTeam->getTeamName() << "?" << endl;
@@ -53,6 +56,7 @@ int main() {
         }
     }
 
+    /* Announce team 1 fighter lineup */
     Fighter *fighterRef = team1->getCurrentFighter();
     Creature *crRef;
     cout << endl << "Fighting in " << team1->getTeamName() << ", we have:" << endl;
@@ -62,6 +66,7 @@ int main() {
         fighterRef = fighterRef->nextFighter;
     }
 
+    /* Announce team 2 fighter lineup */
     fighterRef = team2->getCurrentFighter();
     cout << endl << "Fighting in " << team2->getTeamName() << ", we have:" << endl;
     while (fighterRef != NULL) {
@@ -72,11 +77,13 @@ int main() {
 
     cin.ignore();
 
+    /* Set up game loop vars */
     int roundCounter = 1;
     Fighter *team1CurFtr = team1->getCurrentFighter();
     Fighter *team2CurFtr = team2->getCurrentFighter();
     Creature *curCr1;
     Creature *curCr2;
+    /* Game loop - fight until one of the teams has no more living fighters */
     while ((team1CurFtr != NULL) && (team2CurFtr != NULL)) {
         curCr1 = team1->getCurrentFighter()->fighter;
         curCr2 = team2->getCurrentFighter()->fighter;
@@ -89,6 +96,8 @@ int main() {
         team2CurFtr = team2->getCurrentFighter();
         roundCounter++;
     }
+
+    /* Announce winners and losers and wrap up the game */
     showWinners(team1, team2);
     showLosers(losers);
     cin.ignore();

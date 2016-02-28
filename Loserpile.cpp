@@ -14,8 +14,8 @@ using std::endl;
 /*----------------------------------------------------------------------------*/
 /*
     Function Name: Loserpile
-    Function Parameters: loser Creature object
-    What the function does: adds a new loser to the Loserpile
+    Function Parameters: N/A
+    What the function does: sets current loser to NULL
 */
 Loserpile::Loserpile() {
     setCurrentLoser(NULL);
@@ -24,9 +24,9 @@ Loserpile::Loserpile() {
 /*----------------------------------------------------------------------------*/
 /*
     Function Names: setCurrentLoser, getCurrentLoser
-    Functions' Parameters: setter receives loser Creatureeger param for queue loser
+    Functions' Parameters: setter receives Loser struct param for queue loser
     What the functions do: getter and setter which act as public options to
-                           read/write the Queue class's private queueLoser
+                           read/write the Loserpile class's private loser
 */
 void Loserpile::setCurrentLoser(Loser *loser) {
     currentLoser = loser;
@@ -40,10 +40,10 @@ Loser *Loserpile::getCurrentLoser() {
 /*
     Function Name: add
     Function Parameters: loser Creature object
-    What the function does: initializes a new Loser struct, settings its
-                            previous stack loser to NULL, and its loser
-                            to the provided loser Creatureeger.  Then gets the current
-                            stack loser and sets it as the current loser.
+    What the function does: initializes a new Loser struct setting its loser to
+                            the provided Creature pointer.  Then gets the pile's
+                            current loser, setting it as the new loser's prev
+                            loser, and sets new loser as the current loser.
 */
 void Loserpile::add(Creature *loser) {
     Loser *stackLoser = new Loser;
@@ -59,10 +59,10 @@ void Loserpile::add(Creature *loser) {
 /*
     Function Name: remove
     Function Parameters: N/A
-    What the function does: gets the current stack loser and the previos loser from
+    What the function does: gets the current pile loser and the previos loser from
                             the current loser, then sets the previous loser as the
                             new current loser, deleting the old current loser and
-                            returning its loser Creatureeger
+                            returning its loser Creature pointer
 */
 Creature *Loserpile::remove() {
     Loser *currLoser = getCurrentLoser();
